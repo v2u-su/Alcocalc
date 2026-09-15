@@ -13,10 +13,11 @@ flutter run
 Платформенные папки (`android/`, `ios/`, `web/`) уже в репозитории, `flutter create .`
 больше не нужен. Тесты: `flutter test`.
 
-Требуется Flutter с актуального stable: шаблон собран под AGP 9.1.0, Kotlin 2.4.0,
-Gradle 9.3.1, compileSdk 36. На более старом SDK Gradle ругнётся на версии —
-тогда проще снести `android/` и выполнить `flutter create . --platforms=android`,
-иконки и `strings.xml` при этом лучше сохранить и вернуть обратно.
+Сборка Android настроена на Gradle 8.12, AGP 8.7.3, Kotlin 2.1.0 — версии
+подобраны под Flutter SDK 3.2x–3.3x. На Gradle 9 плагин Flutter из таких SDK
+не компилируется (`Unresolved reference 'fileMode'`), поэтому версии здесь
+намеренно не самые свежие. Если SDK заметно новее, поднять их в
+`android/settings.gradle.kts` и `android/gradle/wrapper/gradle-wrapper.properties`.
 
 `android/gradlew` и `gradle-wrapper.jar` в репозиторий не кладутся (так же, как в
 шаблоне Flutter) — их подставляет сам `flutter build` при первой сборке.
