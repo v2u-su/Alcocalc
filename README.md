@@ -5,19 +5,23 @@
 
 ## Запуск
 
-В репозитории только `lib/`, `test/` и `pubspec.yaml` — платформенных папок нет.
-Чтобы их сгенерировать:
-
 ```bash
-cd alcocalc
-flutter create . --project-name alcocalc --platforms=android,ios
 flutter pub get
 flutter run
 ```
 
-Тесты: `flutter test` (сверяют расчёты с контрольными значениями таблицы).
+Платформенные папки (`android/`, `ios/`, `web/`) уже в репозитории, `flutter create .`
+больше не нужен. Тесты: `flutter test`.
 
-Требуется Flutter 3.19+ (используется `TabAlignment.start`).
+Требуется Flutter с актуального stable: шаблон собран под AGP 9.1.0, Kotlin 2.4.0,
+Gradle 9.3.1, compileSdk 36. На более старом SDK Gradle ругнётся на версии —
+тогда проще снести `android/` и выполнить `flutter create . --platforms=android`,
+иконки и `strings.xml` при этом лучше сохранить и вернуть обратно.
+
+`android/gradlew` и `gradle-wrapper.jar` в репозиторий не кладутся (так же, как в
+шаблоне Flutter) — их подставляет сам `flutter build` при первой сборке.
+
+Идентификаторы: `su.v2u.alcocalc` на обеих платформах, имя пакета Dart — `alcocalc`.
 
 ## Экраны и формулы
 
@@ -44,16 +48,13 @@ flutter run
 - `web/favicon.png`, `web/icons/Icon-{192,512}.png`
 - мастер-файл `assets/icon/icon.png` (1024 px)
 
-Отображаемое имя — «Калькулятор самогона»:
+Отображаемое имя «Калькулятор самогона» уже проставлено:
 
-- Android: в `android/app/src/main/AndroidManifest.xml` поставить
-  `android:label="@string/app_name"` (строка лежит в
-  `android/app/src/main/res/values/strings.xml`).
-- iOS: в `ios/Runner/Info.plist` ключ `CFBundleDisplayName` = `Калькулятор самогона`.
-- Локально это делает `bash tools/rename_app.sh`.
-
-Имя пакета Dart остаётся `alcocalc` — его менять не нужно, на экране оно не видно,
-зато от него зависят все импорты `package:alcocalc/...`.
+- Android — `android:label="@string/app_name"` в манифесте, строка в
+  `android/app/src/main/res/values/strings.xml`
+- iOS — `CFBundleDisplayName` в `ios/Runner/Info.plist`
+- Web — `web/manifest.json` и `<title>` в `web/index.html`
+- В переключателе задач — `MaterialApp.title` в `lib/main.dart`
 
 Если иконку захочется перерисовать: заменить `assets/icon/icon.png` и выполнить
 `dart run flutter_launcher_icons` — конфиг уже в `pubspec.yaml`.
