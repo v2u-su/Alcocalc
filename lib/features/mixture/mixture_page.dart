@@ -35,7 +35,7 @@ class _MixturePageState extends State<MixturePage>
     final tooStrong = _targetAbv > _abv;
 
     return CalcPage(
-      title: 'Расчёт смеси',
+      title: 'Разбавление в объём',
       children: [
         ValueField(
           label: 'Крепость спирта',
@@ -79,7 +79,12 @@ class _MixturePageState extends State<MixturePage>
               unit: 'мл',
               big: true,
             ),
-            ResultLine(caption: 'Вода', value: fmtNum(r.water), unit: 'мл'),
+            ResultLine(
+              caption: 'Вода',
+              value: fmtNum(r.water),
+              unit: 'мл',
+              icon: Icons.water_drop_outlined,
+            ),
           ],
           hint: tooStrong
               ? 'Нужная крепость выше крепости спирта — смесь не получится.'

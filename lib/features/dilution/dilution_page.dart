@@ -31,7 +31,7 @@ class _DilutionPageState extends State<DilutionPage>
     final tooStrong = _targetAbv > _abv;
 
     return CalcPage(
-      title: 'Разбавление водой',
+      title: 'Разбавление до крепости',
       children: [
         ValueField(
           label: 'Исходная крепость',
@@ -79,6 +79,7 @@ class _DilutionPageState extends State<DilutionPage>
               caption: 'Итоговый объём',
               value: fmtNum(r.totalVolume),
               unit: 'мл',
+              icon: Icons.science_outlined,
             ),
           ],
           hint: tooStrong

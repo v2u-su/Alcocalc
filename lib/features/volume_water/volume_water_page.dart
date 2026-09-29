@@ -30,7 +30,7 @@ class _VolumeWaterPageState extends State<VolumeWaterPage>
     final r = calcWaterAdd(abv: _abv, volume: _volume, water: _water);
 
     return CalcPage(
-      title: 'Объём и вода',
+      title: 'Смесь с водой',
       children: [
         ValueField(
           label: 'Крепость',

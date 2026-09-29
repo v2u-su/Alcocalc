@@ -35,7 +35,7 @@ class _StrengthPageState extends State<StrengthPage>
     final water = _targetVolume - _volume;
 
     return CalcPage(
-      title: 'Расчёт крепости',
+      title: 'Крепость в объёме',
       children: [
         ValueField(
           label: 'Крепость',
@@ -80,11 +80,20 @@ class _StrengthPageState extends State<StrengthPage>
               value: fmtNum(abv, decimals: 1),
               unit: '%',
               big: true,
+              icon: Icons.thermostat,
             ),
+            if (water >= 0)
+              ResultLine(
+                caption: 'Долить воды',
+                value: fmtNum(water),
+                unit: 'мл',
+                big: true,
+                icon: Icons.water_drop_outlined,
+              ),
           ],
-          hint: water >= 0
-              ? 'Долить воды: ${fmtNum(water)} мл'
-              : 'Нужный объём меньше исходного — разбавления не будет.',
+          hint: water < 0
+              ? 'Нужный объём меньше исходного — разбавления не будет.'
+              : null,
         ),
       ],
     );

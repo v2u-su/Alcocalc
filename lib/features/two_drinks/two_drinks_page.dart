@@ -36,7 +36,7 @@ class _TwoDrinksPageState extends State<TwoDrinksPage>
     );
 
     return CalcPage(
-      title: 'Смешивание двух крепостей',
+      title: 'Смесь 2х крепостей',
       children: [
         const GroupLabel(text: 'Напиток 1', color: AppColors.teal),
         ValueField(
@@ -86,18 +86,20 @@ class _TwoDrinksPageState extends State<TwoDrinksPage>
         const SizedBox(height: 20),
         ResultCard(
           accent: AppColors.amber,
-          icon: Icons.auto_awesome,
+          icon: Icons.thermostat,
           lines: [
             ResultLine(
               caption: 'Итоговая крепость',
               value: fmtNum(r.abv, decimals: 1),
               unit: '%',
               big: true,
+              icon: Icons.thermostat,
             ),
             ResultLine(
               caption: 'Итоговый объём',
               value: fmtNum(r.totalVolume),
               unit: 'мл',
+              icon: Icons.science_outlined,
             ),
           ],
         ),

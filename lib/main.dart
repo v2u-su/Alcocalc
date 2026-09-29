@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'core/theme.dart';
 import 'features/dilution/dilution_page.dart';
@@ -33,14 +34,14 @@ class _TabSpec {
 }
 
 const _tabs = <_TabSpec>[
-  _TabSpec('Разбавление\nводой', Icons.water_drop_outlined, AppColors.teal,
-      DilutionPage()),
-  _TabSpec('Расчёт\nкрепости', Icons.thermostat, AppColors.amber,
-      StrengthPage()),
-  _TabSpec('Расчёт\nсмеси', Icons.layers_outlined, AppColors.teal,
+  _TabSpec('Разбавление\nв объём', Icons.layers_outlined, AppColors.teal,
       MixturePage()),
-  _TabSpec('Объём\nи вода', Icons.opacity, AppColors.teal, VolumeWaterPage()),
-  _TabSpec('Два\nнапитка', Icons.science_outlined, AppColors.amber,
+  _TabSpec('Разбавление\nдо крепости', Icons.water_drop_outlined,
+      AppColors.teal, DilutionPage()),
+  _TabSpec('Крепость\nв объёме', Icons.thermostat, AppColors.amber,
+      StrengthPage()),
+  _TabSpec('Смесь\nс водой', Icons.opacity, AppColors.teal, VolumeWaterPage()),
+  _TabSpec('Смесь 2х\nкрепостей', Icons.science_outlined, AppColors.amber,
       TwoDrinksPage()),
 ];
 
@@ -53,14 +54,37 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
+  /// Ключ, под которым запоминается последняя открытая вкладка.
+  static const _lastTabKey = 'last_tab';
+
   late final TabController _controller =
-      TabController(length: _tabs.length, vsync: this)
-        ..addListener(() => setState(() {}));
+      TabController(length: _tabs.length, vsync: this)..addListener(_onTabChanged);
+
+  @override
+  void initState() {
+    super.initState();
+    _restoreLastTab();
+  }
 
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  Future<void> _restoreLastTab() async {
+    final prefs = await SharedPreferences.getInstance();
+    final index = prefs.getInt(_lastTabKey) ?? 0;
+    if (!mounted || index < 0 || index >= _tabs.length) return;
+    setState(() => _controller.index = index);
+  }
+
+  void _onTabChanged() {
+    setState(() {});
+    if (_controller.indexIsChanging) return;
+    final index = _controller.index;
+    SharedPreferences.getInstance()
+        .then((prefs) => prefs.setInt(_lastTabKey, index));
   }
 
   @override
@@ -95,7 +119,7 @@ class _HomeScreenState extends State<HomeScreen>
                     height: 74,
                     icon: Icon(tab.icon, size: 22),
                     child: SizedBox(
-                      width: 74,
+                      width: 78,
                       child: Text(tab.label, textAlign: TextAlign.center),
                     ),
                   ),
