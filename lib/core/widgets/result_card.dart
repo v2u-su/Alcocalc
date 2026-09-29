@@ -8,12 +8,16 @@ class ResultLine {
     required this.value,
     required this.unit,
     this.big = false,
+    this.icon,
   });
 
   final String caption;
   final String value;
   final String unit;
   final bool big;
+
+  /// Своя иконка строки. Если не задана, у первой строки берётся иконка карточки.
+  final IconData? icon;
 }
 
 /// Карточка результата — подсвеченный блок внизу экрана.
@@ -52,7 +56,11 @@ class ResultCard extends StatelessWidget {
         children: [
           for (var i = 0; i < lines.length; i++) ...[
             if (i > 0) const SizedBox(height: 16),
-            _LineView(line: lines[i], accent: accent, icon: i == 0 ? icon : null),
+            _LineView(
+              line: lines[i],
+              accent: accent,
+              icon: lines[i].icon ?? (i == 0 ? icon : null),
+            ),
           ],
           if (hint != null) ...[
             const SizedBox(height: 14),

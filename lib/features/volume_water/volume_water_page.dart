@@ -65,18 +65,20 @@ class _VolumeWaterPageState extends State<VolumeWaterPage>
         const SizedBox(height: 20),
         ResultCard(
           accent: AppColors.teal,
-          icon: Icons.opacity,
+          icon: Icons.thermostat,
           lines: [
             ResultLine(
               caption: 'Итоговая крепость',
               value: fmtNum(r.abv, decimals: 1),
               unit: '%',
               big: true,
+              icon: Icons.thermostat,
             ),
             ResultLine(
               caption: 'Итоговый объём',
               value: fmtNum(r.totalVolume),
               unit: 'мл',
+              icon: Icons.science_outlined,
             ),
           ],
         ),
