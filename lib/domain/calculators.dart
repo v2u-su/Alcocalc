@@ -107,3 +107,39 @@ BlendResult calcBlend({
     totalVolume: total,
   );
 }
+
+/// Отбор голов при втором перегоне. Общепринятое правило: головы считают
+/// не от объёма спирта-сырца, а от абсолютного спирта в нём.
+class HeadsResult {
+  const HeadsResult({
+    required this.absoluteAlcohol,
+    required this.heads,
+    required this.rest,
+  });
+
+  /// Абсолютный спирт в заливаемом сырце, мл.
+  final double absoluteAlcohol;
+
+  /// Сколько отобрать в головы, мл.
+  final double heads;
+
+  /// Сколько сырца останется на тело и хвосты, мл.
+  final double rest;
+}
+
+HeadsResult calcHeads({
+  required double abv,
+  required double volume,
+  required double headsPercent,
+}) {
+  if (abv <= 0 || volume <= 0) {
+    return const HeadsResult(absoluteAlcohol: 0, heads: 0, rest: 0);
+  }
+  final absolute = volume * abv / 100;
+  final heads = absolute * headsPercent / 100;
+  return HeadsResult(
+    absoluteAlcohol: absolute,
+    heads: heads,
+    rest: volume - heads < 0 ? 0 : volume - heads,
+  );
+}

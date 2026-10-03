@@ -26,6 +26,13 @@ void main() {
     expect(r.totalVolume, 2000);
   });
 
+  test('головы: 5000 мл сырца 30 %, отбор 10 % от АС', () {
+    final r = calcHeads(abv: 30, volume: 5000, headsPercent: 10);
+    expect(r.absoluteAlcohol, closeTo(1500, 0.001));
+    expect(r.heads, closeTo(150, 0.001));
+    expect(r.rest, closeTo(4850, 0.001));
+  });
+
   test('два напитка: 50 % / 1000 мл + 60 % / 1000 мл', () {
     final r = calcBlend(abv1: 50, volume1: 1000, abv2: 60, volume2: 1000);
     expect(r.abv, closeTo(55, 0.001));

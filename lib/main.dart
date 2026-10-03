@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'core/theme.dart';
 import 'features/dilution/dilution_page.dart';
+import 'features/heads/heads_page.dart';
 import 'features/mixture/mixture_page.dart';
 import 'features/strength/strength_page.dart';
 import 'features/two_drinks/two_drinks_page.dart';
@@ -43,6 +44,8 @@ const _tabs = <_TabSpec>[
   _TabSpec('Смесь\nс водой', Icons.opacity, AppColors.teal, VolumeWaterPage()),
   _TabSpec('Смесь 2х\nкрепостей', Icons.science_outlined, AppColors.amber,
       TwoDrinksPage()),
+  _TabSpec('Калькулятор\nголов', Icons.content_cut, AppColors.teal,
+      HeadsPage()),
 ];
 
 class HomeScreen extends StatefulWidget {
