@@ -1,0 +1,67 @@
+name: Android APK
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+env:
+  # Версия подобрана под Gradle 8.12 / AGP 8.7.3 / Kotlin 2.1.0 из android/.
+  # Меняешь Flutter — проверь, что версии в android/ ещё совместимы.
+  FLUTTER_VERSION: '3.29.3'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Сборка APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: gradle
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+          cache: true
+
+      - name: Зависимости
+        run: flutter pub get
+
+      - name: Анализ
+        run: flutter analyze --no-fatal-infos
+
+      - name: Тесты
+        run: flutter test
+
+      - name: APK по архитектурам
+        run: flutter build apk --release --split-per-abi
+
+      - name: Универсальный APK
+        run: flutter build apk --release
+
+      - name: Выложить артефакты
+        uses: actions/upload-artifact@v4
+        with:
+          name: alcocalc-apk
+          path: build/app/outputs/flutter-apk/*.apk
+          retention-days: 30
+          if-no-files-found: error
+
+      - name: Релиз по тегу
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: build/app/outputs/flutter-apk/*.apk
+          generate_release_notes: true
