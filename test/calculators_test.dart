@@ -46,6 +46,18 @@ void main() {
     expect(r.bodyVolume, closeTo(1730.769, 0.01));
   });
 
+  test('отсечка по температуре: узел и интерполяция', () {
+    final node = calcByCubeTemp(92);
+    expect(node.cubeAbv, closeTo(12.2, 0.001));
+    expect(node.outputAbv, closeTo(57.9, 0.001));
+
+    final between = calcByCubeTemp(92.5);
+    expect(between.cubeAbv, closeTo(11.2, 0.001));
+    expect(between.outputAbv, closeTo(55.75, 0.001));
+
+    expect(calcByCubeTemp(85).inRange, isFalse);
+  });
+
   test('два напитка: 50 % / 1000 мл + 60 % / 1000 мл', () {
     final r = calcBlend(abv1: 50, volume1: 1000, abv2: 60, volume2: 1000);
     expect(r.abv, closeTo(55, 0.001));

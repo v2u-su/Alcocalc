@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'core/theme.dart';
+import 'features/cube_temp/cube_temp_page.dart';
 import 'features/dilution/dilution_page.dart';
 import 'features/heads/heads_page.dart';
 import 'features/mixture/mixture_page.dart';
@@ -49,6 +50,8 @@ const _tabs = <_TabSpec>[
       HeadsPage()),
   _TabSpec('Калькулятор\nхвостов', Icons.vertical_align_bottom,
       AppColors.amber, TailsPage()),
+  _TabSpec('Отсечка\nпо t°', Icons.device_thermostat, AppColors.teal,
+      CubeTempPage()),
 ];
 
 class HomeScreen extends StatefulWidget {

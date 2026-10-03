@@ -200,3 +200,70 @@ TailsResult calcTails({
     bodyVolume: bodyAbv <= 0 ? 0 : bodyAlcohol * 100 / bodyAbv,
   );
 }
+
+/// Таблица «температура в кубе → крепость в кубе → крепость в струе»
+/// для атмосферного давления 760 мм рт. ст.
+/// Источник: таблица температурного режима перегонки с forum.homedistiller.ru.
+const List<List<double>> cubeTempTable = <List<double>>[
+  // [t, °C], [% об. в кубе], [% об. в отборе]
+  [88, 21.9, 68.9],
+  [89, 19.1, 66.7],
+  [90, 16.5, 64.1],
+  [91, 14.3, 61.3],
+  [92, 12.2, 57.9],
+  [93, 10.2, 53.6],
+  [94, 8.5, 49.0],
+  [95, 6.9, 43.6],
+  [96, 5.3, 36.8],
+  [97, 3.9, 29.5],
+  [98, 2.5, 20.7],
+  [99, 1.2, 10.8],
+  [100, 0.0, 0.0],
+];
+
+class CubeTempResult {
+  const CubeTempResult({
+    required this.cubeAbv,
+    required this.outputAbv,
+    required this.inRange,
+  });
+
+  /// Крепость кубовой жидкости, % об.
+  final double cubeAbv;
+
+  /// Крепость в струе на выходе из холодильника, % об.
+  final double outputAbv;
+
+  /// Попадает ли температура в диапазон таблицы (88–100 °C).
+  final bool inRange;
+}
+
+/// Крепость в кубе и в струе по температуре кипения. Между узлами таблицы —
+/// линейная интерполяция.
+CubeTempResult calcByCubeTemp(double t) {
+  final first = cubeTempTable.first;
+  final last = cubeTempTable.last;
+  if (t < first[0]) {
+    return CubeTempResult(
+      cubeAbv: first[1],
+      outputAbv: first[2],
+      inRange: false,
+    );
+  }
+  if (t >= last[0]) {
+    return CubeTempResult(cubeAbv: last[1], outputAbv: last[2], inRange: true);
+  }
+  for (var i = 0; i < cubeTempTable.length - 1; i++) {
+    final a = cubeTempTable[i];
+    final b = cubeTempTable[i + 1];
+    if (t >= a[0] && t <= b[0]) {
+      final k = (t - a[0]) / (b[0] - a[0]);
+      return CubeTempResult(
+        cubeAbv: a[1] + (b[1] - a[1]) * k,
+        outputAbv: a[2] + (b[2] - a[2]) * k,
+        inRange: true,
+      );
+    }
+  }
+  return CubeTempResult(cubeAbv: last[1], outputAbv: last[2], inRange: true);
+}
