@@ -6,6 +6,7 @@ import 'features/dilution/dilution_page.dart';
 import 'features/heads/heads_page.dart';
 import 'features/mixture/mixture_page.dart';
 import 'features/strength/strength_page.dart';
+import 'features/tails/tails_page.dart';
 import 'features/two_drinks/two_drinks_page.dart';
 import 'features/volume_water/volume_water_page.dart';
 
@@ -46,6 +47,8 @@ const _tabs = <_TabSpec>[
       TwoDrinksPage()),
   _TabSpec('Калькулятор\nголов', Icons.content_cut, AppColors.teal,
       HeadsPage()),
+  _TabSpec('Калькулятор\nхвостов', Icons.vertical_align_bottom,
+      AppColors.amber, TailsPage()),
 ];
 
 class HomeScreen extends StatefulWidget {

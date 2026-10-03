@@ -33,6 +33,19 @@ void main() {
     expect(r.rest, closeTo(4850, 0.001));
   });
 
+  test('хвосты: 5000 мл сырца 30 %, головы 10 %, хвосты 15 %, тело 65 %', () {
+    final r = calcTails(
+      abv: 30,
+      volume: 5000,
+      headsPercent: 10,
+      tailsPercent: 15,
+      bodyAbv: 65,
+    );
+    expect(r.tails, closeTo(225, 0.001));
+    expect(r.bodyAlcohol, closeTo(1125, 0.001));
+    expect(r.bodyVolume, closeTo(1730.769, 0.01));
+  });
+
   test('два напитка: 50 % / 1000 мл + 60 % / 1000 мл', () {
     final r = calcBlend(abv1: 50, volume1: 1000, abv2: 60, volume2: 1000);
     expect(r.abv, closeTo(55, 0.001));

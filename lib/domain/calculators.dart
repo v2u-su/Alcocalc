@@ -143,3 +143,60 @@ HeadsResult calcHeads({
     rest: volume - heads < 0 ? 0 : volume - heads,
   );
 }
+
+/// Отсечка хвостов. Головы и хвосты считаются от абсолютного спирта,
+/// остаток приходится на тело.
+class TailsResult {
+  const TailsResult({
+    required this.absoluteAlcohol,
+    required this.heads,
+    required this.tails,
+    required this.bodyAlcohol,
+    required this.bodyVolume,
+  });
+
+  /// Абсолютный спирт в сырце, мл.
+  final double absoluteAlcohol;
+
+  /// Головы, мл.
+  final double heads;
+
+  /// Хвосты, мл.
+  final double tails;
+
+  /// Абсолютный спирт, остающийся в теле, мл.
+  final double bodyAlcohol;
+
+  /// Объём тела при заданной средней крепости отбора, мл.
+  final double bodyVolume;
+}
+
+TailsResult calcTails({
+  required double abv,
+  required double volume,
+  required double headsPercent,
+  required double tailsPercent,
+  required double bodyAbv,
+}) {
+  if (abv <= 0 || volume <= 0) {
+    return const TailsResult(
+      absoluteAlcohol: 0,
+      heads: 0,
+      tails: 0,
+      bodyAlcohol: 0,
+      bodyVolume: 0,
+    );
+  }
+  final absolute = volume * abv / 100;
+  final heads = absolute * headsPercent / 100;
+  final tails = absolute * tailsPercent / 100;
+  final rest = absolute - heads - tails;
+  final bodyAlcohol = rest < 0 ? 0.0 : rest;
+  return TailsResult(
+    absoluteAlcohol: absolute,
+    heads: heads,
+    tails: tails,
+    bodyAlcohol: bodyAlcohol,
+    bodyVolume: bodyAbv <= 0 ? 0 : bodyAlcohol * 100 / bodyAbv,
+  );
+}
